@@ -23,7 +23,7 @@ const MenuBar = () => {
       </TouchableOpacity>
       <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Icon name="color-filter-outline" size={23} color="#bdbdbd"></Icon>
-        <Text style={{ fontSize: 12 }}>Product</Text>
+        <Text style={{ fontSize: 12 }}>Outlet</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Icon name="cart-outline" size={23} color="#bdbdbd"></Icon>

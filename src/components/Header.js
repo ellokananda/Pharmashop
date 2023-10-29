@@ -31,7 +31,6 @@ const Header = (Props) => {
             }}>
             <Icon name="search" size={25} color="#FFFFFF"/>
             </TouchableOpacity>
-          
         </View> 
         </View>
     )
