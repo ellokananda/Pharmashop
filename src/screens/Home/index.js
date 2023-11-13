@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StatusBar, TextInput, FlatList, Touchable, ScrollView } from 'react-native';
 import { Header, Content, MenuBar, Feed } from '../../components';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Home = () => {
 
@@ -23,7 +24,7 @@ const Home = () => {
           }}>
           <Header pencarian={pencarian} setPencarian={setPencarian} />
           <Content />
-          <View style={{ flexDirection: 'row', marginTop: 30 }}>
+          {/* <View style={{ flexDirection: 'row', marginTop: 30 }}>
             <Text style={{ color: '#0082f7', fontWeight: 'bold' }}>
               Kategori
             </Text>
@@ -33,29 +34,40 @@ const Home = () => {
                 Lihat Semua
               </Text>
             </TouchableOpacity>
-          </View>
-          <Feed data={kategori} />
+          </View> */}
+          {/* <Feed data={kategori} /> */}
           {/* <Feed data={artikel} /> */}
+
           <View style={{
+            flexDirection: 'row',
+            backgroundColor: "#ffff",
             padding: 30,
-            backgroundColor: '#ffffff',
-            elevation: 10,
-            marginTop: 10
+            justifyContent: "space-between",
+            borderRadius: 10,
+            marginTop: 10,
+            elevation: 7
           }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Resep Rahasia Agar Tetap Sehat</Text>
-            <Text>Inilah resep rahasia agar anda tetap sehat di umur 60an</Text>
+            <View>
+              <TouchableOpacity>
+              <Icon name="chatbubbles-outline" size={18} color="#032442"></Icon>
+              <Text>Chat Apoteker</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity>
+              <Icon name="calendar-outline" size={18} color="#032442"></Icon>
+              <Text>Reservasi Klinik</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity>
+              <Icon name="receipt-outline" size={18} color="#032442"></Icon>
+              <Text>Tebus Resep</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={{
-            padding: 30,
-            backgroundColor: '#ffffff',
-            elevation: 10,
-            marginTop: 10
-          }}>
-            <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Resep Rahasia Agar Tetap Sehat</Text>
-            <Text>Inilah resep rahasia agar anda tetap sehat di umur 60an</Text>
-          </View>
+
         </View>
-        <MenuBar />
       </View>
     </ScrollView>
   )

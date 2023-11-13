@@ -1,5 +1,4 @@
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Button, Alert, Image } from 'react-native';
-import { Setting2 } from 'iconsax-react-native';
 import React from 'react';
 import { logo } from '../../assets/images';
 

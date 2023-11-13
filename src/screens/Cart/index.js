@@ -19,7 +19,7 @@ const Cart = () => {
             }}>
                 <Text style={{ color: '#ffffff', fontWeight: 'bold', fontSize: 18 }}>Keranjang Saya</Text>
             </View>
-            <View style={{ padding: 10, flexDirection: 'row', gap: 230 }}>
+            <View style={{ padding: 10, flexDirection: 'row', justifyContent:'space-between' }}>
                 <Text style={{ color: '#000000', fontWeight: 'bold' }}>Alamat Pengiriman</Text>
                 <Text style={{ color: '#000000', fontWeight: 'bold', color: '#fdb436' }}>Ubah</Text>
             </View>

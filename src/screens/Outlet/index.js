@@ -2,6 +2,9 @@ import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Button, Alert, Te
 import Icon from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import { logo } from '../../assets/images';
+import {useNavigation} from '@react-navigation/native';
+import ListOutlet from '../../components/ListOutlet';
+import { OutletList } from '../../../data';
 
 const Outlet = () => {
     return (
@@ -82,209 +85,18 @@ const Outlet = () => {
                         <Text style={{
                             fontSize: 14,
                             lineHeight: 18,
-                            color: '000000'
+                            color: '#000000'
                         }}>Klinik</Text>
                     </View>
                 </ScrollView>
             </View>
-
-
-            <View style={{
-                paddingHorizontal: 24,
-                paddingVertical: 10,
-                gap: 15,
-            }}>
-                <View style={{
-                    backgroundColor: '#EFF7FF',
-                    flexDirection: 'row',
-                    borderRadius: 10,
-                }}>
-                    <Image
-                        style={{
-                            width: 94,
-                            height: 150,
-                            borderRadius: 10,
-                            resizeMode: 'cover',
-                        }}
-                        source={{
-                            uri: 'https://plus.unsplash.com/premium_photo-1661770294094-06167872e079?auto=format&fit=crop&q=80&w=1888&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                        }}
-                    />
-                    <View style={{
-                        gap: 10,
-                        justifyContent: 'space-between',
-                        paddingRight: 10,
-                        paddingLeft: 15,
-                        flex: 1,
-                        paddingVertical: 10
-                    }}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                            }}>
-                            <View style={{ gap: 5, width: '70%' }}>
-                                {/* <Text style={{
-                                    color: '#000000',
-                                    fontSize: 10,
-                                }}>Technology</Text> */}
-                                <Text style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    color: '#032442'
-                                }}>
-                                    Apotek Kimia Farma Mondoroko
-                                </Text>
-                                <Text style={{ fontSize: 10 }}>Jl. Raya Mondoroko N0.3 KAV A-B, Kec. Singosari, Singosari, Kab. Malang, Jawa Timur, - 65151</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Icon name="time" size={18} color="#032442"></Icon>
-                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: '#032442', marginLeft: 10 }}>06:30-22:00</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Icon name="call" size={18} color="#032442"></Icon>
-                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: '#032442', marginLeft: 10 }}>08113279437</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-
-            <View style={{
-                paddingHorizontal: 24,
-                paddingVertical: 10,
-                gap: 15,
-            }}>
-                <View style={{
-                    backgroundColor: '#EFF7FF',
-                    flexDirection: 'row',
-                    borderRadius: 10,
-                }}>
-                    <Image
-                        style={{
-                            width: 94,
-                            height: 150,
-                            borderRadius: 10,
-                            resizeMode: 'cover',
-                        }}
-                        source={{
-                            uri: 'https://plus.unsplash.com/premium_photo-1661770294094-06167872e079?auto=format&fit=crop&q=80&w=1888&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                        }}
-                    />
-                    <View style={{
-                        gap: 10,
-                        justifyContent: 'space-between',
-                        paddingRight: 10,
-                        paddingLeft: 15,
-                        flex: 1,
-                        paddingVertical: 10
-                    }}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                            }}>
-                            <View style={{ gap: 5, width: '70%' }}>
-                                {/* <Text style={{
-                                    color: '#000000',
-                                    fontSize: 10,
-                                }}>Technology</Text> */}
-                                <Text style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    color: '#032442'
-                                }}>
-                                    Apotek Kimia Farma Mondoroko
-                                </Text>
-                                <Text style={{ fontSize: 10 }}>Jl. Raya Mondoroko N0.3 KAV A-B, Kec. Singosari, Singosari, Kab. Malang, Jawa Timur, - 65151</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Icon name="time" size={18} color="#032442"></Icon>
-                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: '#032442', marginLeft: 10 }}>06:30-22:00</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Icon name="call" size={18} color="#032442"></Icon>
-                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: '#032442', marginLeft: 10 }}>08113279437</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-
-            <View style={{
-                paddingHorizontal: 24,
-                paddingVertical: 10,
-                gap: 15,
-            }}>
-                <View style={{
-                    backgroundColor: '#EFF7FF',
-                    flexDirection: 'row',
-                    borderRadius: 10,
-                }}>
-                    <Image
-                        style={{
-                            width: 94,
-                            height: 150,
-                            borderRadius: 10,
-                            resizeMode: 'cover',
-                        }}
-                        source={{
-                            uri: 'https://plus.unsplash.com/premium_photo-1661770294094-06167872e079?auto=format&fit=crop&q=80&w=1888&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                        }}
-                    />
-                    <View style={{
-                        gap: 10,
-                        justifyContent: 'space-between',
-                        paddingRight: 10,
-                        paddingLeft: 15,
-                        flex: 1,
-                        paddingVertical: 10
-                    }}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                            }}>
-                            <View style={{ gap: 5, width: '70%' }}>
-                                {/* <Text style={{
-                                    color: '#000000',
-                                    fontSize: 10,
-                                }}>Technology</Text> */}
-                                <Text style={{
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    color: '#032442'
-                                }}>
-                                    Apotek Kimia Farma Mondoroko
-                                </Text>
-                                <Text style={{ fontSize: 10 }}>Jl. Raya Mondoroko N0.3 KAV A-B, Kec. Singosari, Singosari, Kab. Malang, Jawa Timur, - 65151</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Icon name="time" size={18} color="#032442"></Icon>
-                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: '#032442', marginLeft: 10 }}>06:30-22:00</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Icon name="call" size={18
-                                    } color="#032442"></Icon>
-                                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                        <Text style={{ color: '#032442', marginLeft: 10 }}>08113279437</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-
+            {
+                OutletList.map((item,index)=>{
+                    return(
+                        <ListOutlet item={item} key={index}/>
+                    )
+                })
+            }
         </View >
     );
 };
