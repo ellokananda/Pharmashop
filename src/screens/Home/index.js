@@ -49,20 +49,20 @@ const Home = () => {
           }}>
             <View>
               <TouchableOpacity>
-              <Icon name="chatbubbles-outline" size={18} color="#032442"></Icon>
-              <Text>Chat Apoteker</Text>
+                <Icon name="chatbubbles-outline" size={18} color="#032442"></Icon>
+                <Text>Chat Apoteker</Text>
               </TouchableOpacity>
             </View>
             <View>
               <TouchableOpacity>
-              <Icon name="calendar-outline" size={18} color="#032442"></Icon>
-              <Text>Reservasi Klinik</Text>
+                <Icon name="calendar-outline" size={18} color="#032442"></Icon>
+                <Text>Reservasi Klinik</Text>
               </TouchableOpacity>
             </View>
             <View>
               <TouchableOpacity>
-              <Icon name="receipt-outline" size={18} color="#032442"></Icon>
-              <Text>Tebus Resep</Text>
+                <Icon name="receipt-outline" size={18} color="#032442"></Icon>
+                <Text>Tebus Resep</Text>
               </TouchableOpacity>
             </View>
           </View>

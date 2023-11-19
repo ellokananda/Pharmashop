@@ -1,11 +1,21 @@
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Button, Alert, TextInput, Image } from 'react-native';
+import { ScrollView, Animated, Text, View, TouchableOpacity, Button, Alert, TextInput, Image } from 'react-native';
+import React, { useRef } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { OutletList } from '../../../data';
+import { OutletList, Product } from '../../../data';
 import { ArrowLeft } from 'iconsax-react-native';
 
 //sorkod buat outlet details
+const scrollY = useRef(new Animated.Value(0)).current;
+const diffClampY = Animated.diffClamp(scrollY, 0, 52);
+  const headerY = diffClampY.interpolate({
+    inputRange: [0, 52],
+    outputRange: [0, -52],
+  });
+  const bottomBarY = diffClampY.interpolate({
+    inputRange: [0, 52],
+    outputRange: [0, 52],
+  });
 
 const OutletDetails = ({ route }) => {
     const { outletId } = route.params;
@@ -16,15 +26,27 @@ const OutletDetails = ({ route }) => {
             flex: 1,
             backgroundColor: '#ffffff',
         }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <ArrowLeft
-                    color='grey'
-                    variant="Linear"
-                    size={24}
-                />
-            </TouchableOpacity>
-            <View>
-                <Image
+            <Animated.View style={{ transform: [{ translateY: headerY }] }}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <ArrowLeft
+                        color='grey'
+                        variant="Linear"
+                        size={24}
+                    />
+                </TouchableOpacity>
+            </Animated.View>
+            <Animated.ScrollView
+                showsVerticalScrollIndicator={false}
+                onScroll={Animated.event(
+                    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+                    { useNativeDriver: true },
+                )}
+                contentContainerStyle={{
+                    paddingHorizontal: 10,
+                    paddingTop: 62,
+                    paddingBottom: 20,
+                }}>
+                    <Image
                     style={{
                         width: 'auto',
                         height: 250,
@@ -35,8 +57,7 @@ const OutletDetails = ({ route }) => {
                         headers: { Authorization: 'someAuthToken' },
                     }}
                 />
-            </View>
-            <View style={{ borderRadius: 35, height: 700, backgroundColor: '#ffffff', marginTop: -40 }}>
+                <View style={{ borderRadius: 35, height: 700, backgroundColor: '#ffffff', marginTop: -40 }}>
                 <View style={{ padding: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={{ color: '#000000', fontWeight: 'bold', fontSize: 18 }}>{selectedOutlet.title}</Text>
                     <Text style={{ color: '#000000', fontWeight: 'bold', color: '#fdb436', fontSize: 18 }}>{selectedOutlet.radius}</Text>
@@ -91,7 +112,91 @@ const OutletDetails = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <View style={{ justifyContent: 'space-between', flexDirection: 'row', margin: 25 }}>
+
+                    <View style={{ marginRight: 20, height: 200, }}>
+                        <Image style={{
+                            height: 162,
+                            width: 162,
+                            borderRadius: 8,
+                        }} source={{ uri: 'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=' }} />
+                        <Text style={{
+                            marginTop: 4,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'black',
+
+                        }}>Paracetamol</Text>
+                        <Text style={{
+                            fontSize: 15,
+                            fontWeight: '400',
+                            color: 'black',
+                        }}>Rp. 17.000</Text>
+                    </View>
+                    <View style={{ marginRight: 20, height: 200, }}>
+                        <Image style={{
+                            height: 162,
+                            width: 162,
+                            borderRadius: 8,
+                        }} source={{ uri: 'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=' }} />
+                        <Text style={{
+                            marginTop: 4,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'black',
+                        }}>Paracetamol</Text>
+                        <Text style={{
+                            fontSize: 15,
+                            fontWeight: '400',
+                            color: 'black',
+                        }}>Rp. 17.000</Text>
+                    </View>
+                </View>
+                <View style={{ justifyContent: 'space-between', flexDirection: 'row', margin: 25 }}>
+                    <View style={{ marginRight: 20, height: 200, }}>
+                        <Image style={{
+                            height: 162,
+                            width: 162,
+                            borderRadius: 8,
+                        }} source={{ uri: 'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=' }} />
+                        <Text style={{
+                            marginTop: 4,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'black',
+
+                        }}>Paracetamol</Text>
+                        <Text style={{
+                            fontSize: 15,
+                            fontWeight: '400',
+                            color: 'black',
+                        }}>Rp. 17.000</Text>
+                    </View>
+                    <View style={{ marginRight: 20, height: 200, }}>
+                        <Image style={{
+                            height: 162,
+                            width: 162,
+                            borderRadius: 8,
+                        }} source={{ uri: 'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=' }} />
+                        <Text style={{
+                            marginTop: 4,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'black',
+                        }}>Paracetamol</Text>
+                        <Text style={{
+                            fontSize: 15,
+                            fontWeight: '400',
+                            color: 'black',
+                        }}>Rp. 17.000</Text>
+                    </View>
+                </View>
             </View>
+                </Animated.ScrollView>
+            <View>
+                
+            </View>
+            
         </View >
     );
 };
