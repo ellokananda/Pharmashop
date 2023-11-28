@@ -1,12 +1,12 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { Profile, Outlet, Cart, Home, OutletDetails } from '../screens';
+import { Profile, Product, Cart, Home, ProductDetails, AddProductForm } from '../screens';
 import {Home2, Buildings, ProfileCircle, ShoppingCart} from 'iconsax-react-native'; 
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+
 function MainApp() {
   return (
     <Tab.Navigator
@@ -40,10 +40,10 @@ function MainApp() {
         }}
       />
       <Tab.Screen
-        name="Outlet"
-        component={Outlet}
+        name="Product"
+        component={Product}
         options={{
-          tabBarLabel: 'Outlet',
+          tabBarLabel: 'Product',
           tabBarIcon: ({focused, color}) => (
             <Buildings
               color={color}
@@ -96,8 +96,8 @@ const Router = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="OutletDetails"
-        component={OutletDetails}
+        name="ProductDetails"
+        component={ProductDetails}
         options={{
           headerShown: false, 
           animationEnabled: true,
@@ -107,7 +107,32 @@ const Router = () => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
+      {/* <Stack.Screen
+        name="SearchPage"
+        component={Search}
+        options={{
+          headerShown: false, 
+          animationEnabled: true,
+          animationTypeForReplace: 'pop',
+          gestureEnabled: true,
+          gestureDirection : 'horizontal',
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      /> */}
+      <Stack.Screen
+        name="AddProduct"
+        component={AddProductForm}
+        options={{
+          headerShown: false,
+          animationEnabled: true,
+          animationTypeForReplace: 'pop',
+          gestureEnabled: true,
+          gestureDirection : 'horizontal',
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
     </Stack.Navigator>
+    
   );
 };
 export default Router;

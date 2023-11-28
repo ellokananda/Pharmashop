@@ -2,7 +2,7 @@ import { ScrollView, Animated, Text, View, TouchableOpacity, Button, Alert, Text
 import React, { useRef } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import { OutletList, Product } from '../../../data';
+import { ProductList, Product } from '../../../data';
 import { ArrowLeft } from 'iconsax-react-native';
 
 //sorkod buat outlet details
@@ -17,9 +17,9 @@ const diffClampY = Animated.diffClamp(scrollY, 0, 52);
     outputRange: [0, 52],
   });
 
-const OutletDetails = ({ route }) => {
-    const { outletId } = route.params;
-    const selectedOutlet = OutletList.find(outlet => outlet.id === outletId);
+const ProductDetails = ({ route }) => {
+    const { productId } = route.params;
+    const selectedProduct = ProductList.find(product => product.id === productId);
     const navigation = useNavigation();
     return (
         <View style={{
@@ -53,39 +53,42 @@ const OutletDetails = ({ route }) => {
                         resizeMode: 'cover',
                     }}
                     source={{
-                        uri: selectedOutlet.image,
+                        uri: selectedProduct.image,
                         headers: { Authorization: 'someAuthToken' },
                     }}
                 />
                 <View style={{ borderRadius: 35, height: 700, backgroundColor: '#ffffff', marginTop: -40 }}>
                 <View style={{ padding: 20, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ color: '#000000', fontWeight: 'bold', fontSize: 18 }}>{selectedOutlet.title}</Text>
-                    <Text style={{ color: '#000000', fontWeight: 'bold', color: '#fdb436', fontSize: 18 }}>{selectedOutlet.radius}</Text>
+                    <Text style={{ color: '#000000', fontWeight: 'bold', fontSize: 18 }}>{selectedProduct.title}</Text>
+                    <Text style={{ color: '#000000', fontWeight: 'bold', color: '#fdb436', fontSize: 18 }}>
+                    <Icon name="star" size={25} color="#032442"></Icon>
+                        {selectedProduct.reviews}
+                        </Text>
                 </View>
                 <View style={{ paddingLeft: 20 }}>
                     <View style={{ flexDirection: 'row' }}>
                         <Icon name="location" size={25} color="#032442"></Icon>
                         <View style={{ justifyContent: 'center', alignItems: 'flex-start', width: 300 }}>
-                            <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedOutlet.address}</Text>
+                            <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedProduct.address}</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', paddingTop: 8 }}>
-                        <Icon name="time" size={25} color="#032442"></Icon>
+                        {/* <Icon name="time" size={25} color="#032442"></Icon> */}
                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedOutlet.time}</Text>
+                            <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedProduct.desc}</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', paddingTop: 8, paddingLeft: 5, gap: 120 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Icon name="call" size={18} color="#032442"></Icon>
+                            <Icon name="pricetag" size={18} color="#032442"></Icon>
                             <View style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 2 }}>
-                                <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedOutlet.call}</Text>
+                                <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedProduct.price}</Text>
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Icon name="navigate-outline" size={18} color="#032442"></Icon>
                             <View style={{ justifyContent: 'center', alignItems: 'center', paddingLeft: 2 }}>
-                                <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>Lihat Lokasi</Text>
+                                <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedProduct.sold}</Text>
                             </View>
                         </View>
                     </View>
@@ -105,14 +108,16 @@ const OutletDetails = ({ route }) => {
                             onPress={() => { }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ paddingLeft: 3, paddingTop: 7 }}>
-                                    <Icon name="thumbs-up-outline" size={25} color="purple"></Icon>
+                                    <Icon name="cart" size={25} color="purple"></Icon>
                                 </View>
-                                <Text style={{ fontSize: 15, padding: 12, color: 'purple' }}>Jadikan Apotek Langganan</Text>
+                                <Text style={{ fontSize: 15, padding: 12, color: 'purple' }}>Masukkan ke keranjang</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ justifyContent: 'space-between', flexDirection: 'row', margin: 25 }}>
+
+
+                <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop:'50' }}>
 
                     <View style={{ marginRight: 20, height: 200, }}>
                         <Image style={{
@@ -200,4 +205,4 @@ const OutletDetails = ({ route }) => {
         </View >
     );
 };
-export default OutletDetails;
+export default ProductDetails;

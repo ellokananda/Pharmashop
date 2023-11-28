@@ -1,6 +1,8 @@
 import Home from "./Home";
 import Cart from "./Cart";
-import Outlet from "./Outlet";
+import Product from "./Product";
 import Profile from "./Profile";
-import OutletDetails from "./OutletDetails";
-export {Home, Cart, Outlet, Profile, OutletDetails}
+import ProductDetails from "./OutletDetails";
+//import Search from "./Search";
+import AddProductForm from "./AddProductForm";
+export {Home, Cart, Product, Profile, ProductDetails, AddProductForm}

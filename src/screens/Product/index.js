@@ -1,11 +1,13 @@
-import { ScrollView, Text, View, TouchableOpacity, Animated, TextInput } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Animated, TextInput, TouchableWithoutFeedback } from 'react-native';
 import React, {useRef} from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { SearchNormal1 } from 'iconsax-react-native';
 
 import { logo } from '../../assets/images';
 import { useNavigation } from '@react-navigation/native';
-import ListOutlet from '../../components/ListOutlet';
-import { OutletList } from '../../../data';
+import ListProduct from '../../components/ListProduct';
+import { ProductList } from '../../../data';
+
+const navigation = useNavigation();
 
 const scrollY = useRef(new Animated.Value(0)).current;
 const diffClampY = Animated.diffClamp(scrollY, 0, 142);
@@ -15,7 +17,9 @@ const recentY = diffClampY.interpolate({
     extrapolate: 'clamp',
 });
 
-const Outlet = () => {
+
+
+const Product = () => {
     return (
         <View style={{
             flex: 1,
@@ -31,18 +35,21 @@ const Outlet = () => {
                 justifyContent: 'center',
                 
             }}>
-                <Text style={{ color: '#ffffff' }}>Alamat</Text>
+                <Text style={{ color: '#ffffff' }}>Cari Produk</Text>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate("SearchPage")}>
                 <View style={{ flexDirection: 'row' }}>
-                    <TextInput style={{
+                    <TextInput 
+                    placeholder="Search"
+                    style={{
                         backgroundColor: '#FFFFFF',
                         elevation: 3,
                         marginTop: 10,
                         marginLeft: 5,
                         borderRadius: 5,
-                        flex: 1,
+                        flex: 1
                     }}>
-                        <Icon name="location" size={25} color="#6abce2" />
-                        <Text>Jl.Golf no.44 Tasikmadu</Text>
+                        {/* <Icon name="location" size={25} color="#6abce2" /> */}
+                        {/* <Text>Jl.Golf no.44 Tasikmadu</Text> */}
                     </TextInput>
                     <TouchableOpacity style={{
                         justifyContent: 'center',
@@ -54,6 +61,7 @@ const Outlet = () => {
                     }}>
                     </TouchableOpacity>
                 </View>
+                </TouchableWithoutFeedback>
             </View>
             <View style={{ paddingVertical: 10 }}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -105,7 +113,6 @@ const Outlet = () => {
                 </ScrollView>
             </View>
             </Animated.View>
-            
             <Animated.ScrollView
                 showsVerticalScrollIndicator={false}
                 onScroll={Animated.event(
@@ -113,11 +120,11 @@ const Outlet = () => {
                     { useNativeDriver: true },
                 )}
                 contentContainerStyle={{ paddingTop: 142 }}>
-                <View>
+                <View style={{flexDirection:'row', justifyContent:'space-between', flexWrap:'wrap'}}>
                 {
-                    OutletList.map((item, index) => {
+                    ProductList.map((item, index) => {
                         return (
-                            <ListOutlet item={item} key={index} />
+                            <ListProduct item={item} key={index} />
                         )
                     })
                 }
@@ -127,4 +134,4 @@ const Outlet = () => {
     );
 };
 
-export default Outlet;
+export default Product;
