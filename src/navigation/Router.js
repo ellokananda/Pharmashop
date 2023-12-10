@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { Profile, Product, Cart, Home, ProductDetails, AddProductForm } from '../screens';
+import { Profile, Product, Cart, Home, ProductDetails, AddProductForm, EditProductForm } from '../screens';
 import {Home2, Buildings, ProfileCircle, ShoppingCart} from 'iconsax-react-native'; 
 
 const Tab = createBottomTabNavigator();
@@ -107,6 +107,18 @@ const Router = () => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
+      <Stack.Screen
+        name="EditProduct"
+        component={EditProductForm}
+        options={{
+          headerShown: false,
+          animationEnabled: true,
+          animationTypeForReplace: 'pop',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
       {/* <Stack.Screen
         name="SearchPage"
         component={Search}
@@ -131,6 +143,7 @@ const Router = () => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
+      
     </Stack.Navigator>
     
   );

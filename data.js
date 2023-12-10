@@ -1,7 +1,7 @@
 export const ProductList = [
     {
         id: 1,
-        title: 'Paracetamol',
+        title: 'Paracetamol', 
         reviews: '4.8',
         address: 'Jl. Soekarno Hatta Ruko GRIYA SHANTA MP-51, Lowokwaru, Kota Malang, Jawa Timur, 65141',
         image:
@@ -89,26 +89,3 @@ export const ProductList = [
     }
     
 ];
-export const Product = [
-    {
-        id: 1,
-        imageProduct:
-            'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=',
-        merk: 'Paracetamol',
-        harga: '17.000',
-    },
-    {
-        id: 1,
-        imageProduct:
-            'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=',
-        merk: 'Paracetamol',
-        harga: '17.000',
-    },
-    {
-        id: 1,
-        imageProduct:
-            'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=',
-        merk: 'Paracetamol',
-        harga: '17.000',
-    },
-]

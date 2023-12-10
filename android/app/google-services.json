@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "696900656286",
+    "project_id": "pharmashop-c2dbd",
+    "storage_bucket": "pharmashop-c2dbd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696900656286:android:c16ff08e39c5e70b856f8f",
+        "android_client_info": {
+          "package_name": "com.pharmashop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBodYFDJpUUzEh_21Smtvk3w2SQFZcm_I4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,17 +1,83 @@
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Button, Alert, Image } from 'react-native';
-import React from 'react';
+import { ScrollView, StyleSheet, Text, View, RefreshControl, TouchableOpacity, Button, Alert, Image, ActivityIndicator } from 'react-native';
+import React, {useEffect, useState, useCallback} from 'react';
 import { logo } from '../../assets/images';
-import { Setting2, Edit, Scroll } from "iconsax-react-native";
-import { useNavigation } from "@react-navigation/native";
+import {Edit, Setting2} from 'iconsax-react-native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import axios from 'axios';
+import ListProduct from '../../components/ListProduct';
+import firestore from '@react-native-firebase/firestore';
 
 const Profile = () => {
     const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
+    const [productData, setProductData] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+    useEffect(() => {
+        const subscriber = firestore()
+          .collection('product')
+          .onSnapshot(querySnapshot => {
+            const products = [];
+            querySnapshot.forEach(documentSnapshot => {
+              products.push({
+                ...documentSnapshot.data(),
+                id: documentSnapshot.id,
+              });
+            });
+            setProductData(products);
+            setLoading(false);
+          });
+        return () => subscriber();
+      }, []);
+    
+    // const getDataProduct = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             'https://6565a4bfeb8bb4b70ef202aa.mockapi.io/pharmashop/product',
+    //         );
+    //         setProductData(response.data);
+    //         setLoading(false)
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+          firestore()
+            .collection('product')
+            .onSnapshot(querySnapshot => {
+              const products = [];
+              querySnapshot.forEach(documentSnapshot => {
+                products.push({
+                  ...documentSnapshot.data(),
+                  id: documentSnapshot.id,
+                });
+              });
+              setProductData(products);
+            });
+          setRefreshing(false);
+        }, 1500);
+      }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            getDataProduct();
+        }, [])
+    );
     return (
         <View style={{
             flex: 1,
             backgroundColor: '#ffffff',
         }}>
-            <ScrollView>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingHorizontal: 24,
+                    gap: 10,
+                    paddingVertical: 20,
+                }} refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }>
                 <View style={{
                     backgroundColor: '#235284',
                     paddingLeft: 150,
@@ -78,6 +144,13 @@ const Profile = () => {
                     <Text style={{ fontSize: 15, paddingBottom: 10 }}>Hubungi Kami</Text>
                     <Text style={{ fontSize: 15, paddingBottom: 10 }}>FAQ</Text>
                     <Text style={{ fontSize: 15, paddingBottom: 10 }}>Keluar</Text>
+                </View>
+                <View style={{ paddingVertical: 10, gap: 10 }}>
+                    {loading ? (
+                        <ActivityIndicator size={'large'} color="#0099ff" />
+                    ) : (
+                        productData.map((item, index) => <ListProduct item={item} key={index} />)
+                    )}
                 </View>
             </ScrollView>
             <TouchableOpacity

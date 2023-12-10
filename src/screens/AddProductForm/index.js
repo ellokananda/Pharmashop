@@ -1,23 +1,68 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import { ArrowLeft } from "iconsax-react-native";
+import FastImage from 'react-native-fast-image';
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 
 
 const AddProductForm = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleImagePick = async () => {
+    ImagePicker.openPicker({
+      width: 1920,
+      height: 1080,
+      cropping: true,
+    })
+      .then(image => {
+        console.log(image);
+        setImage(image.path);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const handleUpload = async () => {
+    let filename = image.substring(image.lastIndexOf('/') + 1);
+    const extension = filename.split('.').pop();
+    const name = filename.split('.').slice(0, -1).join('.');
+    filename = name + Date.now() + '.' + extension;
+    const reference = storage().ref(`productimages/${filename}`);
+
+    setLoading(true);
+    try {
+      await reference.putFile(image);
+      const url = await reference.getDownloadURL();
+      await firestore().collection('blog').add({
+        title: productData.title,
+        desc: productData.desc,
+        image: url,
+        price: productData.price,
+        sold: productData.sold,
+        address: productData.address,
+        reviewst: productData.reviews,
+      });
+      setLoading(false);
+      console.log('Product added!');
+      navigation.navigate('Profile');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [productData, setProductData] = useState({
-    title: "",
-    desc: "",
-    address:"",
-    price:""
+    title: '',
+    desc: '',
+    price: '',
+    sold: '',
+    address: '',
+    image :'',
+    reviews:''
   });
   const handleChange = (key, value) => {
     setProductData({
@@ -46,7 +91,7 @@ const AddProductForm = () => {
       >
         <View style={textInput.borderDashed}>
           <TextInput
-            placeholder="Name"
+            placeholder="Product Name"
             value={productData.title}
             onChangeText={(text) => handleChange("title", text)}
             placeholderTextColor="#000834"
@@ -54,7 +99,7 @@ const AddProductForm = () => {
             style={textInput.title}
           />
         </View>
-        <View style={[textInput.borderDashed, { minHeight: 250 }]}>
+        <View style={[textInput.borderDashed, { minHeight: 200 }]}>
           <TextInput
             placeholder="Description"
             value={productData.desc}
@@ -74,7 +119,7 @@ const AddProductForm = () => {
             style={textInput.content}
           />
         </View>
-        <View style={[textInput.borderDashed, { minHeight: 100 }]}>
+        <View style={[textInput.borderDashed, { minHeight: 70 }]}>
           <TextInput
             placeholder="Address"
             value={productData.address}
@@ -84,7 +129,27 @@ const AddProductForm = () => {
             style={textInput.content}
           />
         </View>
-        <View style={[textInput.borderDashed]}>
+        <View style={[textInput.borderDashed, { minHeight: 50 }]}>
+          <TextInput
+            placeholder="Sold"
+            value={productData.sold}
+            onChangeText={(text) => handleChange("sold", text)}
+            placeholderTextColor="#000834"
+            multiline
+            style={textInput.content}
+          />
+        </View>
+        <View style={[textInput.borderDashed, { minHeight: 50 }]}>
+          <TextInput
+            placeholder="Reviews"
+            value={productData.reviews}
+            onChangeText={(text) => handleChange("reviews", text)}
+            placeholderTextColor="#000834"
+            multiline
+            style={textInput.content}
+          />
+        </View>
+        {/* <View style={[textInput.borderDashed]}>
           <TextInput
             placeholder="Image"
             value={image}
@@ -92,14 +157,71 @@ const AddProductForm = () => {
             placeholderTextColor="#000834"
             style={textInput.content}
           />
-        </View>
-        
+        </View> */}
+        {image ? (
+          <View style={{position: 'relative'}}>
+            <FastImage
+              style={{width: '100%', height: 127, borderRadius: 5}}
+              source={{
+                uri: image,
+                headers: {Authorization: 'someAuthToken'},
+                priority: FastImage.priority.high,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                top: -5,
+                right: -5,
+                backgroundColor: colors.blue(),
+                borderRadius: 25,
+              }}
+              onPress={() => setImage(null)}>
+              <Add
+                size={20}
+                variant="Linear"
+                color={colors.white()}
+                style={{transform: [{rotate: '45deg'}]}}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity onPress={handleImagePick}>
+            <View
+              style={[
+                textInput.borderDashed,
+                {
+                  gap: 10,
+                  paddingVertical: 30,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
+              ]}>
+              <AddSquare color={colors.grey(0.6)} variant="Linear" size={42} />
+              <Text
+                style={{
+                  fontFamily: fontType['Pjs-Regular'],
+                  fontSize: 12,
+                  color: colors.grey(0.6),
+                }}>
+                Upload Product Image
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
       </ScrollView>
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <TouchableOpacity style={styles.button} onPress={handleUpload}>
           <Text style={styles.buttonLabel}>Upload</Text>
         </TouchableOpacity>
       </View>
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#0099ff" />
+        </View>
+      )}
     </View>
   );
 };
@@ -110,6 +232,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FEFEFE',
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#000000",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
     paddingHorizontal: 24,
@@ -159,12 +291,12 @@ const textInput = StyleSheet.create({
     padding: 10,
     borderColor: 'blue',
     shadowOffset: {
-    width: 1,
-    height: 1,
+      width: 1,
+      height: 1,
     },
     shadowOpacity: 1,
     shadowRadius: 1,
-    },
+  },
   title: {
     fontSize: 16,
     color: '#000000',
@@ -174,25 +306,5 @@ const textInput = StyleSheet.create({
     fontSize: 12,
     color: '#000000',
     padding: 0,
-  },
-});
-const category = StyleSheet.create({
-  title: {
-    fontSize: 12,
-    color: '#000834'
-  },
-  container: {
-    flexWrap: "wrap",
-    flexDirection: "row",
-    gap: 10,
-    marginTop: 10,
-  },
-  item: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 25,
-  },
-  name: {
-    fontSize: 10,
   },
 });
