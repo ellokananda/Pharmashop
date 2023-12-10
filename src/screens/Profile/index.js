@@ -59,11 +59,11 @@ const Profile = () => {
         }, 1500);
       }, []);
 
-    useFocusEffect(
-        useCallback(() => {
-            getDataProduct();
-        }, [])
-    );
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         getDataProduct();
+    //     }, [])
+    // );
     return (
         <View style={{
             flex: 1,

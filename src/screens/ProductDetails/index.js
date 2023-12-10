@@ -3,22 +3,13 @@ import React, { useRef, useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { ProductList, Product } from '../../../data';
-import {ArrowLeft, Share, More} from 'iconsax-react-native';
+import { ArrowLeft, Share, More } from 'iconsax-react-native';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import ActionSheet from 'react-native-actions-sheet';
 
 //sorkod buat outlet details
-const scrollY = useRef(new Animated.Value(0)).current;
-const diffClampY = Animated.diffClamp(scrollY, 0, 52);
-const headerY = diffClampY.interpolate({
-    inputRange: [0, 52],
-    outputRange: [0, -52],
-});
-const bottomBarY = diffClampY.interpolate({
-    inputRange: [0, 52],
-    outputRange: [0, 52],
-});
+
 
 const ProductDetails = ({ route }) => {
     const { productId } = route.params;
@@ -39,20 +30,20 @@ const ProductDetails = ({ route }) => {
 
     useEffect(() => {
         const subscriber = firestore()
-          .collection('product')
-          .doc(productId)
-          .onSnapshot(documentSnapshot => {
-            const productData = documentSnapshot.data();
-            if (productData) {
-              console.log('Product data: ', productData);
-              setSelectedProduct(productData);
-            } else {
-              console.log(`Product with ID ${productId} not found.`);
-            }
-          });
+            .collection('product')
+            .doc(productId)
+            .onSnapshot(documentSnapshot => {
+                const productData = documentSnapshot.data();
+                if (productData) {
+                    console.log('Product data: ', productData);
+                    setSelectedProduct(productData);
+                } else {
+                    console.log(`Product with ID ${productId} not found.`);
+                }
+            });
         setLoading(false);
         return () => subscriber();
-      }, [productId]);
+    }, [productId]);
 
     // const getProductById = async () => {
     //     try {
@@ -72,15 +63,38 @@ const ProductDetails = ({ route }) => {
         navigation.navigate('EditProduct', { productId })
     }
     const handleDelete = async () => {
-        await axios.delete(`https://6565a4bfeb8bb4b70ef202aa.mockapi.io/pharmashop/product/${productId}`)
-            .then(() => {
-                closeActionSheet()
-                navigation.navigate('Profile');
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        setLoading(true);
+        try {
+            await firestore()
+                .collection('product')
+                .doc(productId)
+                .delete()
+                .then(() => {
+                    console.log('Product deleted!');
+                });
+            if (selectedProduct?.image) {
+                const imageRef = storage().refFromURL(selectedProduct?.image);
+                await imageRef.delete();
+            }
+            console.log('Product deleted!');
+            closeActionSheet();
+            setSelectedProduct(null);
+            setLoading(false)
+            navigation.navigate('Profile');
+        } catch (error) {
+            console.error(error);
+        }
     }
+    const scrollY = useRef(new Animated.Value(0)).current;
+    const diffClampY = Animated.diffClamp(scrollY, 0, 52);
+    const headerY = diffClampY.interpolate({
+        inputRange: [0, 52],
+        outputRange: [0, -52],
+    });
+    const bottomBarY = diffClampY.interpolate({
+        inputRange: [0, 52],
+        outputRange: [0, 52],
+    });
 
 
     const navigation = useNavigation();
@@ -90,15 +104,15 @@ const ProductDetails = ({ route }) => {
             backgroundColor: '#ffffff',
         }}>
             <Animated.View style={{ transform: [{ translateY: headerY }] }}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <ArrowLeft
-                        color='grey'
-                        variant="Linear"
-                        size={24}
-                    />
-                </TouchableOpacity>
-                
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <ArrowLeft
+                            color='grey'
+                            variant="Linear"
+                            size={24}
+                        />
+                    </TouchableOpacity>
+
                     <TouchableOpacity onPress={openActionSheet}>
                         <More
                             color='grey'
@@ -107,8 +121,8 @@ const ProductDetails = ({ route }) => {
                         />
                     </TouchableOpacity>
                 </View>
-                
-                
+
+
             </Animated.View>
 
 

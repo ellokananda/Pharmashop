@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
-import { ArrowLeft } from "iconsax-react-native";
+import {ArrowLeft, AddSquare, Add} from 'iconsax-react-native';
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
@@ -38,14 +38,14 @@ const AddProductForm = () => {
     try {
       await reference.putFile(image);
       const url = await reference.getDownloadURL();
-      await firestore().collection('blog').add({
+      await firestore().collection('product').add({
         title: productData.title,
         desc: productData.desc,
         image: url,
         price: productData.price,
         sold: productData.sold,
         address: productData.address,
-        reviewst: productData.reviews,
+        reviews: productData.reviews,
       });
       setLoading(false);
       console.log('Product added!');
@@ -174,14 +174,14 @@ const AddProductForm = () => {
                 position: 'absolute',
                 top: -5,
                 right: -5,
-                backgroundColor: colors.blue(),
+                backgroundColor: "#0099ff",
                 borderRadius: 25,
               }}
               onPress={() => setImage(null)}>
               <Add
                 size={20}
                 variant="Linear"
-                color={colors.white()}
+                color="#ffffff"
                 style={{transform: [{rotate: '45deg'}]}}
               />
             </TouchableOpacity>
@@ -198,12 +198,12 @@ const AddProductForm = () => {
                   alignItems: 'center',
                 },
               ]}>
-              <AddSquare color={colors.grey(0.6)} variant="Linear" size={42} />
+              <AddSquare color='blue' variant="Linear" size={42} />
               <Text
                 style={{
-                  fontFamily: fontType['Pjs-Regular'],
+                 
                   fontSize: 12,
-                  color: colors.grey(0.6),
+                  color: 'grey',
                 }}>
                 Upload Product Image
               </Text>
