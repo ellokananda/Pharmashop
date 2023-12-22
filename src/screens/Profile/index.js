@@ -1,74 +1,132 @@
 import { ScrollView, StyleSheet, Text, View, RefreshControl, TouchableOpacity, Button, Alert, Image, ActivityIndicator } from 'react-native';
-import React, {useEffect, useState, useCallback} from 'react';
-import { logo } from '../../assets/images';
-import {Edit, Setting2} from 'iconsax-react-native';
-import {useNavigation, useFocusEffect} from '@react-navigation/native';
-import axios from 'axios';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { Edit, Setting2 } from 'iconsax-react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import ListProduct from '../../components/ListProduct';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ActionSheet from 'react-native-actions-sheet';
 
 const Profile = () => {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
     const [productData, setProductData] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [profileData, setProfileData] = useState(null);
+    const actionSheetRef = useRef(null);
+    const openActionSheet = () => {
+        actionSheetRef.current?.show();
+    };
+    const closeActionSheet = () => {
+        actionSheetRef.current?.hide();
+    };
+
     useEffect(() => {
-        const subscriber = firestore()
-          .collection('product')
-          .onSnapshot(querySnapshot => {
-            const products = [];
-            querySnapshot.forEach(documentSnapshot => {
-              products.push({
-                ...documentSnapshot.data(),
-                id: documentSnapshot.id,
-              });
-            });
-            setProductData(products);
-            setLoading(false);
-          });
-        return () => subscriber();
-      }, []);
-    
-    // const getDataProduct = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             'https://6565a4bfeb8bb4b70ef202aa.mockapi.io/pharmashop/product',
-    //         );
-    //         setProductData(response.data);
-    //         setLoading(false)
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+        const user = auth().currentUser;
+        const fetchProductData = () => {
+            try {
+                if (user) {
+                    const userId = user.uid;
+                    const productCollection = firestore().collection('product');
+                    const query = productCollection.where('authorId', '==', userId);
+                    const unsubscribeProduct = query.onSnapshot(querySnapshot => {
+                        const products = querySnapshot.docs.map(doc => ({
+                            ...doc.data(),
+                            id: doc.id,
+                        }));
+                        setProductData(products);
+                        setLoading(false);
+                    });
+
+                    return () => {
+                        unsubscribeProduct();
+                    };
+                }
+            } catch (error) {
+                console.error('Error fetching product data:', error);
+            }
+        };
+
+        const fetchProfileData = () => {
+            try {
+                const user = auth().currentUser;
+                if (user) {
+                    const userId = user.uid;
+                    const userRef = firestore().collection('users').doc(userId);
+
+                    const unsubscribeProfile = userRef.onSnapshot(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            setProfileData(userData);
+                            fetchProductData();
+                        } else {
+                            console.error('Dokumen pengguna tidak ditemukan.');
+                        }
+                    });
+
+                    return () => {
+                        unsubscribeProfile();
+                    };
+                }
+            } catch (error) {
+                console.error('Error fetching profile data:', error);
+            }
+        };
+        fetchProductData();
+        fetchProfileData();
+    }, []);
+
+
+
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-          firestore()
-            .collection('product')
-            .onSnapshot(querySnapshot => {
-              const products = [];
-              querySnapshot.forEach(documentSnapshot => {
-                products.push({
-                  ...documentSnapshot.data(),
-                  id: documentSnapshot.id,
+            firestore()
+                .collection('product')
+                .onSnapshot(querySnapshot => {
+                    const products = [];
+                    querySnapshot.forEach(documentSnapshot => {
+                        products.push({
+                            ...documentSnapshot.data(),
+                            id: documentSnapshot.id,
+                        });
+                    });
+                    setProductData(products);
                 });
-              });
-              setProductData(products);
-            });
-          setRefreshing(false);
+            setRefreshing(false);
         }, 1500);
-      }, []);
+    }, []);
+    const handleLogout = async () => {
+        try {
+            closeActionSheet();
+            await auth().signOut();
+            await AsyncStorage.removeItem('userData');
+            navigation.replace('Login');
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         getDataProduct();
-    //     }, [])
-    // );
     return (
         <View style={{
             flex: 1,
             backgroundColor: '#ffffff',
         }}>
+            <View style={{
+                paddingHorizontal: 24,
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+                height: 52,
+                elevation: 8,
+                paddingTop: 8,
+                paddingBottom: 4,
+            }}>
+                <TouchableOpacity onPress={openActionSheet}>
+                    <Setting2 color='black' variant="Linear" size={24} />
+                </TouchableOpacity>
+            </View>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
@@ -175,6 +233,48 @@ const Profile = () => {
             >
                 <Edit color="white" variant="Linear" size={20} />
             </TouchableOpacity>
+            <ActionSheet
+                ref={actionSheetRef}
+                containerStyle={{
+                    borderTopLeftRadius: 25,
+                    borderTopRightRadius: 25,
+                }}
+                indicatorStyle={{
+                    width: 100,
+                }}
+                gestureEnabled={true}
+                defaultOverlayOpacity={0.3}>
+                <TouchableOpacity
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingVertical: 15,
+                    }}
+                    onPress={handleLogout}>
+                    <Text
+                        style={{
+                            color: 'black',
+                            fontSize: 18,
+                        }}>
+                        Log out
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingVertical: 15,
+                    }}
+                    onPress={closeActionSheet}>
+                    <Text
+                        style={{
+                            color: 'red',
+                            fontSize: 18,
+                        }}>
+                        Cancel
+                    </Text>
+                </TouchableOpacity>
+            </ActionSheet>
         </View>
 
 

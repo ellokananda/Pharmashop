@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, KeyboardAvoidingView} from 'react-native';
 import {ArrowLeft, AddSquare, Add} from 'iconsax-react-native';
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from "@react-navigation/native";
-import axios from 'axios';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 
 const AddProductForm = () => {
@@ -36,6 +36,7 @@ const AddProductForm = () => {
 
     setLoading(true);
     try {
+      const userId = auth().currentUser.uid;
       await reference.putFile(image);
       const url = await reference.getDownloadURL();
       await firestore().collection('product').add({
@@ -46,6 +47,7 @@ const AddProductForm = () => {
         sold: productData.sold,
         address: productData.address,
         reviews: productData.reviews,
+        userId
       });
       setLoading(false);
       console.log('Product added!');
@@ -73,6 +75,10 @@ const AddProductForm = () => {
   const [image, setImage] = useState(null);
   const navigation = useNavigation();
   return (
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      enabled>
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -149,15 +155,6 @@ const AddProductForm = () => {
             style={textInput.content}
           />
         </View>
-        {/* <View style={[textInput.borderDashed]}>
-          <TextInput
-            placeholder="Image"
-            value={image}
-            onChangeText={(text) => setImage(text)}
-            placeholderTextColor="#000834"
-            style={textInput.content}
-          />
-        </View> */}
         {image ? (
           <View style={{position: 'relative'}}>
             <FastImage
@@ -223,6 +220,7 @@ const AddProductForm = () => {
         </View>
       )}
     </View>
+    </KeyboardAvoidingView>
   );
 };
 

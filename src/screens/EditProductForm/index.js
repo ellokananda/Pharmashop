@@ -71,25 +71,6 @@ const EditProductForm = ({ route }) => {
             });
     };
 
-    // const getProductById = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `https://6565a4bfeb8bb4b70ef202aa.mockapi.io/pharmashop/product/${productId}`,
-    //         );
-    //         setProductData({
-    //             title: response.data.title,
-    //             desc: response.data.desc,
-    //             price: response.data.price,
-    //             sold: response.data.sold,
-    //             address: response.data.address,
-    //             reviews: response.data.reviews
-    //         })
-    //         setImage(response.data.image)
-    //         setLoading(false);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
     const handleUpdate = async () => {
         setLoading(true);
         let filename = image.substring(image.lastIndexOf('/') + 1);
@@ -251,9 +232,6 @@ const EditProductForm = ({ route }) => {
             </View>
           </TouchableOpacity>
         )}
-
-
-
             </ScrollView>
             <View style={styles.bottomBar}>
                 <TouchableOpacity style={styles.button} onPress={handleUpdate}>

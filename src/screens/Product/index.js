@@ -7,7 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 import ListProduct from '../../components/ListProduct';
 import { ProductList } from '../../../data';
 
-const navigation = useNavigation();
+
+
+
+
+const Product = () => {
+    const navigation = useNavigation();
 
 const scrollY = useRef(new Animated.Value(0)).current;
 const diffClampY = Animated.diffClamp(scrollY, 0, 142);
@@ -16,10 +21,6 @@ const recentY = diffClampY.interpolate({
     outputRange: [0, -142],
     extrapolate: 'clamp',
 });
-
-
-
-const Product = () => {
     return (
         <View style={{
             flex: 1,

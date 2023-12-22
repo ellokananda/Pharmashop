@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { Profile, Product, Cart, Home, ProductDetails, AddProductForm, EditProductForm } from '../screens';
+import { Profile, Product, Cart, Home, ProductDetails, AddProductForm, EditProductForm, SplashScreen, Login, Register } from '../screens';
 import {Home2, Buildings, ProfileCircle, ShoppingCart} from 'iconsax-react-native'; 
 
 const Tab = createBottomTabNavigator();
@@ -89,7 +89,7 @@ function MainApp() {
 }
 const Router = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="MainApp"
         component={MainApp}
@@ -119,18 +119,6 @@ const Router = () => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
-      {/* <Stack.Screen
-        name="SearchPage"
-        component={Search}
-        options={{
-          headerShown: false, 
-          animationEnabled: true,
-          animationTypeForReplace: 'pop',
-          gestureEnabled: true,
-          gestureDirection : 'horizontal',
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
-      /> */}
       <Stack.Screen
         name="AddProduct"
         component={AddProductForm}
@@ -143,7 +131,21 @@ const Router = () => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       />
-      
+      <Stack.Screen
+        name="SplashScreen"
+        component={SplashScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
     
   );

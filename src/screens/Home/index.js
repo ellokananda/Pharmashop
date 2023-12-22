@@ -3,9 +3,29 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StatusBar, TextInput, FlatList, Touchable, ScrollView } from 'react-native';
 import { Header, Content, MenuBar, Feed } from '../../components';
 import Icon from 'react-native-vector-icons/Ionicons';
+import firestore from '@react-native-firebase/firestore';
 
 const Home = () => {
+  useEffect(() => {
+    const fetchProductData = () => {
+      try {
+        const productCollection = firestore().collection('product');
+        const unsubscribeProduct = productCollection.onSnapshot(querySnapshot => {
+          const products = querySnapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+        });
 
+        return () => {
+          unsubscribeProduct();
+        };
+      } catch (error) {
+        console.error('Error fetching product data:', error);
+      }
+    };
+    fetchProductData();
+  }, []);
   const [pencarian, setPencarian] = useState('');
   const [kategori, setKategori] = useState([
     { namaKategori: 'Artikel' },
@@ -24,20 +44,6 @@ const Home = () => {
           }}>
           <Header pencarian={pencarian} setPencarian={setPencarian} />
           <Content />
-          {/* <View style={{ flexDirection: 'row', marginTop: 30 }}>
-            <Text style={{ color: '#0082f7', fontWeight: 'bold' }}>
-              Kategori
-            </Text>
-            <TouchableOpacity
-              style={{ justifyContent: 'center', alignItems: 'flex-end', flex: 1 }}>
-              <Text style={{ color: '#FDB436', fontWeight: 'bold' }}>
-                Lihat Semua
-              </Text>
-            </TouchableOpacity>
-          </View> */}
-          {/* <Feed data={kategori} /> */}
-          {/* <Feed data={artikel} /> */}
-
           <View style={{
             flexDirection: 'row',
             backgroundColor: "#ffff",

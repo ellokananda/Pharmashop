@@ -2,14 +2,11 @@ import { ScrollView, Animated, Text, View, TouchableOpacity, Button, Alert, Text
 import React, { useRef, useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import { ProductList, Product } from '../../../data';
 import { ArrowLeft, Share, More } from 'iconsax-react-native';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import ActionSheet from 'react-native-actions-sheet';
-
-//sorkod buat outlet details
-
+import auth from '@react-native-firebase/auth';
 
 const ProductDetails = ({ route }) => {
     const { productId } = route.params;
@@ -17,7 +14,7 @@ const ProductDetails = ({ route }) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
 
     const [loading, setLoading] = useState(true);
-
+    const userId = auth().currentUser.uid;
     const actionSheetRef = useRef(null);
 
     const openActionSheet = () => {
@@ -44,19 +41,6 @@ const ProductDetails = ({ route }) => {
         setLoading(false);
         return () => subscriber();
     }, [productId]);
-
-    // const getProductById = async () => {
-    //     try {
-    //         const response = await axios.get(
-    //             `https://6565a4bfeb8bb4b70ef202aa.mockapi.io/pharmashop/product/${productId}`,
-    //         );
-    //         setSelectedProduct(response.data);
-    //         console.log(response.data)
-    //         setLoading(false);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
 
     const navigateEdit = () => {
         closeActionSheet()
@@ -121,11 +105,24 @@ const ProductDetails = ({ route }) => {
                         />
                     </TouchableOpacity>
                 </View>
-
-
+                <View style={{flexDirection: 'row', justifyContent: 'center', gap: 20}}>
+          <Share color={colors.grey(0.6)} variant="Linear" size={24} />
+          {userId === selectedBlog?.authorId && (
+            <TouchableOpacity onPress={openActionSheet}>
+              <More
+                color={colors.grey(0.6)}
+                variant="Linear"
+                style={{transform: [{rotate: '90deg'}]}}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
             </Animated.View>
-
-
+            {loading ? (
+        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+          <ActivityIndicator size={'large'} color={colors.blue()} />
+        </View>
+      ) : (
             <Animated.ScrollView
                 showsVerticalScrollIndicator={false}
                 onScroll={Animated.event(
@@ -153,7 +150,7 @@ const ProductDetails = ({ route }) => {
                         <Text style={{ color: '#000000', fontWeight: 'bold', fontSize: 18 }}>{selectedProduct?.title}</Text>
                         <Text style={{ color: '#000000', fontWeight: 'bold', color: '#fdb436', fontSize: 18 }}>
                             <Icon name="star" size={25} color="#032442"></Icon>
-                            {selectedProduct?.reviewst}
+                            {selectedProduct?.reviews}
                         </Text>
                     </View>
                     <View style={{ paddingLeft: 20 }}>
@@ -164,7 +161,6 @@ const ProductDetails = ({ route }) => {
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', paddingTop: 8 }}>
-                            {/* <Icon name="time" size={25} color="#032442"></Icon> */}
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={{ color: '#032442', marginLeft: 10, fontSize: 15 }}>{selectedProduct?.desc}</Text>
                             </View>
@@ -248,47 +244,9 @@ const ProductDetails = ({ route }) => {
                             }}>Rp. 17.000</Text>
                         </View>
                     </View>
-                    {/* <View style={{ justifyContent: 'space-between', flexDirection: 'row', margin: 25 }}>
-                    <View style={{ marginRight: 20, height: 200, }}>
-                        <Image style={{
-                            height: 162,
-                            width: 162,
-                            borderRadius: 8,
-                        }} source={{ uri: 'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=' }} />
-                        <Text style={{
-                            marginTop: 4,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                            color: 'black',
-
-                        }}>Paracetamol</Text>
-                        <Text style={{
-                            fontSize: 15,
-                            fontWeight: '400',
-                            color: 'black',
-                        }}>Rp. 17.000</Text>
-                    </View>
-                    <View style={{ marginRight: 20, height: 200, }}>
-                        <Image style={{
-                            height: 162,
-                            width: 162,
-                            borderRadius: 8,
-                        }} source={{ uri: 'https://media.istockphoto.com/id/1217210776/photo/generic-paracetamol-500mg-tablets.webp?b=1&s=170667a&w=0&k=20&c=2Lrt57zBZJooCwSzVNz379Vj59fyLMloNjhk6aktRHs=' }} />
-                        <Text style={{
-                            marginTop: 4,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                            color: 'black',
-                        }}>Paracetamol</Text>
-                        <Text style={{
-                            fontSize: 15,
-                            fontWeight: '400',
-                            color: 'black',
-                        }}>Rp. 17.000</Text>
-                    </View>
-                </View> */}
                 </View>
             </Animated.ScrollView>
+      )}
             <View>
             </View>
             <ActionSheet
