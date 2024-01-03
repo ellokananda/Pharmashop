@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     marginBottom:60,
+    marginHorizontal:6
   },
   box: {
     height: 130,

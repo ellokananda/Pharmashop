@@ -78,7 +78,6 @@ const Profile = () => {
     }, []);
 
 
-
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
@@ -203,13 +202,13 @@ const Profile = () => {
                     <Text style={{ fontSize: 15, paddingBottom: 10 }}>FAQ</Text>
                     <Text style={{ fontSize: 15, paddingBottom: 10 }}>Keluar</Text>
                 </View>
-                <View style={{ paddingVertical: 10, gap: 10 }}>
+                {/* <View style={{ paddingVertical: 10, gap: 10 }}>
                     {loading ? (
                         <ActivityIndicator size={'large'} color="#0099ff" />
                     ) : (
                         productData.map((item, index) => <ListProduct item={item} key={index} />)
                     )}
-                </View>
+                </View> */}
             </ScrollView>
             <TouchableOpacity
                 style={{
@@ -277,8 +276,6 @@ const Profile = () => {
             </ActionSheet>
         </View>
 
-
     );
 };
-
 export default Profile;

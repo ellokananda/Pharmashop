@@ -8,7 +8,6 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-
 const AddProductForm = () => {
   const [loading, setLoading] = useState(false);
 
@@ -51,7 +50,7 @@ const AddProductForm = () => {
       });
       setLoading(false);
       console.log('Product added!');
-      navigation.navigate('Profile');
+      navigation.navigate('Product');
     } catch (error) {
       console.log(error);
     }
@@ -306,3 +305,5 @@ const textInput = StyleSheet.create({
     padding: 0,
   },
 });
+
+

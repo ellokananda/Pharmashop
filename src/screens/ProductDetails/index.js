@@ -1,4 +1,4 @@
-import { ScrollView, Animated, Text, View, TouchableOpacity, Button, Alert, TextInput, Image } from 'react-native';
+import { ScrollView, Animated, Text, View, TouchableOpacity, Button, Alert, TextInput, Image, ActivityIndicator } from 'react-native';
 import React, { useRef, useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -24,7 +24,6 @@ const ProductDetails = ({ route }) => {
     const closeActionSheet = () => {
         actionSheetRef.current?.hide();
     };
-
     useEffect(() => {
         const subscriber = firestore()
             .collection('product')
@@ -64,7 +63,7 @@ const ProductDetails = ({ route }) => {
             closeActionSheet();
             setSelectedProduct(null);
             setLoading(false)
-            navigation.navigate('Profile');
+            navigation.navigate('Product');
         } catch (error) {
             console.error(error);
         }
@@ -79,7 +78,6 @@ const ProductDetails = ({ route }) => {
         inputRange: [0, 52],
         outputRange: [0, 52],
     });
-
 
     const navigation = useNavigation();
     return (
@@ -106,21 +104,21 @@ const ProductDetails = ({ route }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'center', gap: 20}}>
-          <Share color={colors.grey(0.6)} variant="Linear" size={24} />
-          {userId === selectedBlog?.authorId && (
+          {/* <Share color="grey" variant="Linear" size={24} /> */}
+          {/* {userId === selectedProduct?.userId && (
             <TouchableOpacity onPress={openActionSheet}>
               <More
-                color={colors.grey(0.6)}
+                color="grey"
                 variant="Linear"
                 style={{transform: [{rotate: '90deg'}]}}
               />
             </TouchableOpacity>
-          )}
+          )} */}
         </View>
             </Animated.View>
             {loading ? (
         <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-          <ActivityIndicator size={'large'} color={colors.blue()} />
+          <ActivityIndicator size={'large'} color="blue" />
         </View>
       ) : (
             <Animated.ScrollView
@@ -131,7 +129,7 @@ const ProductDetails = ({ route }) => {
                 )}
                 contentContainerStyle={{
                     paddingHorizontal: 10,
-                    paddingTop: 62,
+                    paddingTop: 10,
                     paddingBottom: 20,
                 }}>
                 <Image
@@ -203,7 +201,6 @@ const ProductDetails = ({ route }) => {
                         </View>
                     </View>
 
-
                     <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: '50' }}>
 
                         <View style={{ marginRight: 20, height: 200, }}>
@@ -247,8 +244,7 @@ const ProductDetails = ({ route }) => {
                 </View>
             </Animated.ScrollView>
       )}
-            <View>
-            </View>
+            
             <ActionSheet
                 ref={actionSheetRef}
                 containerStyle={{
@@ -310,3 +306,5 @@ const ProductDetails = ({ route }) => {
     );
 };
 export default ProductDetails;
+
+

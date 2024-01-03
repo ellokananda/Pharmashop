@@ -1,18 +1,24 @@
-import { ScrollView, Text, View, TouchableOpacity, Animated, TextInput, TouchableWithoutFeedback } from 'react-native';
-import React, {useRef} from 'react';
+import { ScrollView, Text, View, TouchableOpacity, Animated, TextInput, TouchableWithoutFeedback, ActivityIndicator, RefreshControl } from 'react-native';
+import React, {useRef, useCallback, useState, useEffect} from 'react';
 import { SearchNormal1 } from 'iconsax-react-native';
 
 import { logo } from '../../assets/images';
 import { useNavigation } from '@react-navigation/native';
 import ListProduct from '../../components/ListProduct';
 import { ProductList } from '../../../data';
-
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ActionSheet from 'react-native-actions-sheet';
 
 
 
 
 const Product = () => {
     const navigation = useNavigation();
+    const [refreshing, setRefreshing] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [productData, setProductData] = useState([]);
 
 const scrollY = useRef(new Animated.Value(0)).current;
 const diffClampY = Animated.diffClamp(scrollY, 0, 142);
@@ -21,6 +27,42 @@ const recentY = diffClampY.interpolate({
     outputRange: [0, -142],
     extrapolate: 'clamp',
 });
+
+useEffect(() => {
+    const subscriber = firestore()
+      .collection('product')
+      .onSnapshot(querySnapshot => {
+        const products = [];
+        querySnapshot.forEach(documentSnapshot => {
+          products.push({
+            ...documentSnapshot.data(),
+            id: documentSnapshot.id,
+          });
+        });
+        setProductData(products);
+        setLoading(false);
+      });
+    return () => subscriber();
+  }, []);
+
+const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+        firestore()
+            .collection('product')
+            .onSnapshot(querySnapshot => {
+                const products = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    products.push({
+                        ...documentSnapshot.data(),
+                        id: documentSnapshot.id,
+                    });
+                });
+                setProductData(products);
+            });
+        setRefreshing(false);
+    }, 1500);
+}, []);
     return (
         <View style={{
             flex: 1,
@@ -65,7 +107,10 @@ const recentY = diffClampY.interpolate({
                 </TouchableWithoutFeedback>
             </View>
             <View style={{ paddingVertical: 10 }}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }>
                     <View style={{
                         paddingHorizontal: 14,
                         paddingVertical: 10,
@@ -120,8 +165,8 @@ const recentY = diffClampY.interpolate({
                     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
                     { useNativeDriver: true },
                 )}
-                contentContainerStyle={{ paddingTop: 142 }}>
-                <View style={{flexDirection:'row', justifyContent:'space-between', flexWrap:'wrap'}}>
+                contentContainerStyle={{ paddingTop: 5 }}>
+                {/* <View style={{flexDirection:'row', justifyContent:'space-between', flexWrap:'wrap'}}>
                 {
                     ProductList.map((item, index) => {
                         return (
@@ -129,6 +174,13 @@ const recentY = diffClampY.interpolate({
                         )
                     })
                 }
+                </View> */}
+                <View style={{ paddingVertical: 10, gap: 10, flexDirection:'row', justifyContent:'space-between', flexWrap:'wrap' }}>
+                    {loading ? (
+                        <ActivityIndicator size={'large'} color="#0099ff" />
+                    ) : (
+                        productData.map((item, index) => <ListProduct item={item} key={index} />)
+                    )}
                 </View>
             </Animated.ScrollView>
         </View >
